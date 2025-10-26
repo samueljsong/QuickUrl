@@ -1,0 +1,15 @@
+{
+    "name" : "QuickUrl",
+    "description" : "Extension used to quickly navigate to predefined URLs.",
+    "version" : "1.0",
+    "manifest_version" : 3,
+    "permissions" : ["tabs"],
+    "omnibox": { "keyword": "url" },
+    "background": {
+    "service_worker": "scripts/background.js"
+  },
+    "action" : {
+        "default_popup" : "dist/popup/index.html",
+        "default_icon" : "./images/bolt.png"
+    }
+}
