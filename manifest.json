@@ -3,7 +3,7 @@
     "description" : "Extension used to quickly navigate to predefined URLs.",
     "version" : "1.0",
     "manifest_version" : 3,
-    "permissions" : ["tabs"],
+    "permissions" : ["tabs", "storage", "omnibox"],
     "omnibox": { "keyword": "url" },
     "background": {
     "service_worker": "scripts/background.js"
