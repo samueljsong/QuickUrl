@@ -12,13 +12,14 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
-import { Label } from "@radix-ui/react-label"
 import { Input } from "./ui/input"
+import { Label } from "@radix-ui/react-label"
+import { toast } from "sonner"
 
 export const CreateUrlDialog = () => {
 
     const [targetUrl, setTargetUrl] = useState("");
-    const [keyword, setKeyword] = useState("");
+    const [keyword, setKeyword]     = useState("");
 
     const onAlertDialogClickHandler = () => {
         chrome.tabs.query({active: true, currentWindow: true}, (tabs: chrome.tabs.Tab[]) => {
@@ -28,28 +29,22 @@ export const CreateUrlDialog = () => {
     }
 
     const onCreateClickHandler = () => {
-        if (keyword.length === 0 && targetUrl.length === 0)
+        if (keyword.length === 0 || targetUrl.length === 0)
         {
-            alert("Please enter a valid Target Url and Keyword");
+            toast.error("Please provide a valid Target Url and Keyword");
             return;
         }
 
         chrome.storage.local.get(null, (items) => {
             const newItems = { ...items, [keyword]: targetUrl };
             chrome.storage.local.set(newItems, () => {
-                console.log("Shortcut saved!", newItems);
+                toast.success("QuickUrl created successfully", {description: `The QuickUrl with keyword: ${keyword} and url: ${targetUrl} has been created.`});
             });
         });
     }
 
-    const onTargetUrlChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setTargetUrl(e.target.value);
-    }
-
-    const onKeywordChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setKeyword(e.target.value);
-        console.log(keyword);
-    }
+    const onTargetUrlChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => setTargetUrl(e.target.value);
+    const onKeywordChangeHandler   = (e: React.ChangeEvent<HTMLInputElement>) => setKeyword(e.target.value);
 
     return (
         <AlertDialog>
@@ -77,7 +72,7 @@ export const CreateUrlDialog = () => {
                         Target Url
                     </Label>
                     <Input 
-                        className=" font-light squish" 
+                        className=" font-light squish text-sm" 
                         defaultValue={targetUrl} 
                         onChange={onTargetUrlChangeHandler} 
                     />
@@ -85,7 +80,7 @@ export const CreateUrlDialog = () => {
                         Keyword
                     </Label>
                     <Input 
-                        className=" font-light squish" 
+                        className=" font-light squish text-sm" 
                         onChange={onKeywordChangeHandler} 
                     />
                 </AlertDialogHeader>
